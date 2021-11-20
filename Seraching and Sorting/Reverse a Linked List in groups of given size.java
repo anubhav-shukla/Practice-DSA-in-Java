@@ -1,99 +1,140 @@
-// Java program to reverse a linked list in groups of
-// given size
-class LinkedList {
-    Node head; // head of list
+package DSA;
 
-    /* Linked list Node*/
-    class Node {
-        int data;
-        Node next;
-        Node(int d)
-        {
-            data = d;
-            next = null;
-        }
-    }
+import java.util.List;
 
-    Node reverse(Node head, int k)
-    {
-        if(head == null)
-          return null;
-        Node current = head;
-        Node next = null;
-        Node prev = null;
 
-        int count = 0;
+public class ReverseaLinkedListingroupsofgivensize {
+	public static void main (String[]args) throws Exception
+	  {
+	    LinkedList ll = new LinkedList ();
+	      ll.addFirst (51);
+	      ll.addFirst (35);
+	      ll.addFirst (27);
+	      ll.addFirst (15);
+	      ll.addFirst (11);
 
-        /* Reverse first k nodes of linked list */
-        while (count < k && current != null) {
-            next = current.next;
-            current.next = prev;
-            prev = current;
-            current = next;
-            count++;
-        }
+	      ll.display ();
 
-        /* next is now a pointer to (k+1)th node
-           Recursively call for the list starting from
-           current. And make rest of the list as next of
-           first node */
-        if (next != null)
-            head.next = reverse(next, k);
+	      ll.kReverse (2);
+	      ll.display ();
 
-        // prev is now head of input list
-        return prev;
-    }
+	  }
 
-    /* Utility functions */
+	}
 
-    /* Inserts a new Node at front of the list. */
-    public void push(int new_data)
-    {
-        /* 1 & 2: Allocate the Node &
-                  Put in the data*/
-        Node new_node = new Node(new_data);
+	class LinkedList
+	{
+	  private class Node
+	  {
+	    int data;
+	    Node next;
 
-        /* 3. Make next of new Node as head */
-        new_node.next = head;
+	    public Node (int data, Node next)
+	    {
+	      this.data = data;
+	      this.next = next;
+	    }
+	  }
 
-        /* 4. Move the head to point to new Node */
-        head = new_node;
-    }
+	  private Node head;
+	  private Node tail;
+	  private int size;
 
-    /* Function to print linked list */
-    void printList()
-    {
-        Node temp = head;
-        while (temp != null) {
-            System.out.print(temp.data + " ");
-            temp = temp.next;
-        }
-        System.out.println();
-    }
+	  public LinkedList ()
+	  {
+	    this.head = null;
+	    this.tail = null;
+	    this.size = 0;
 
-    /* Driver program to test above functions */
-    public static void main(String args[])
-    {
-        LinkedList llist = new LinkedList();
+	  }
 
-        /* Constructed Linked List is 1->2->3->4->5->6->
-           7->8->8->9->null */
-        llist.push(9);
-        llist.push(8);
-        llist.push(7);
-        llist.push(6);
-        llist.push(5);
-        llist.push(4);
-        llist.push(3);
-        llist.push(2);
-        llist.push(1);
+	  public int size ()
+	  {
+	    return this.size;
+	  }
+	  public boolean isEmpty ()
+	  {
+	    return this.size () == 0;
+	  }
+	  public void display ()
+	  {
+	    Node temp = head;
+	    while (temp != null)
+	      {
+		System.out.print (temp.data + "  ");
 
-        System.out.println("Given Linked List");
-        llist.printList();
+		temp = temp.next;
+	      }
+	    System.out.println ("END");
+	  }
 
-        llist.head = llist.reverse(llist.head, 3);
+	  public void addFirst (int item)
+	  {
+	    Node temp = new Node (item, head);
+	    if (this.size == 0)
+	      {
+		this.head = this.tail = temp;
+	      }
+	    else
+	      {
+		this.head = temp;
 
-        System.out.println("Reversed list");
-        llist.printList();
-    }
-}
+	      }
+
+	    this.size++;
+	  }
+
+	  public int removeFirst () throws Exception
+	  {
+	    if (this.size () == 0)
+	      {
+		throw new Exception ("Linked list is empty");
+	      }
+
+	    int rv = this.head.data;
+
+	    if (this.size () == 1)
+	      {
+		this.head = this.tail = null;
+	      }
+	    else
+	      {
+		this.head = this.head.next;
+	      }
+
+	    this.size--;
+	    return rv;
+	  }
+ public void kReverse (int k) throws Exception
+	  {
+
+	    LinkedList curr = null, klist = null;
+
+	    while (!this.isEmpty ())
+	      {
+		curr = new LinkedList ();
+		for (int i = 0; i < k && !this.isEmpty (); i++)
+		  {
+          curr.addFirst (this.removeFirst ());
+
+		  }
+
+		if (klist == null)
+		  {
+		    klist = curr;
+		  }
+		else
+		  {
+
+		    klist.tail.next = curr.head;
+		    klist.tail = curr.tail;
+		    klist.size = klist.size + curr.size ();
+		  }
+	      }
+
+	 this.head = klist.head;
+	    this.tail = klist.tail;
+	    this.size = klist.size ();
+
+	  }
+	}
